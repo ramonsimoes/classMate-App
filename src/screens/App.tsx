@@ -1,7 +1,7 @@
 import { SafeAreaView, StyleSheet, Text, Image, View, FlatList, TextInput, TouchableOpacity } from 'react-native';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
-import React, { useEffect, useState } from 'react'; 
-import { supabase } from './lib/supabase';
+import React, { useEffect, useState } from 'react';
+import { supabase } from '../../lib/supabase';
 import { format } from 'date-fns';   
 
 interface Post {
@@ -15,7 +15,7 @@ interface Post {
 export default function App() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [searchText, setSearchText] = useState('');
-  const [sortCriteria, setSortCriteria] = useState('date'); 
+  const [sortCriteria, setSortCriteria] = useState<'date' | 'title' | 'author'>('date'); 
 
   useEffect(() => {
     getPosts();
@@ -68,13 +68,15 @@ export default function App() {
       return a.author.localeCompare(b.author);
     }
     return 0;
-  });
+  }); 
 
-  return (  
-    <SafeAreaView style={styles.container}>
+  return (
+
+    <SafeAreaView style={styles.container}> 
+
       <View style={styles.box}>
         <Text style={styles.title}>ClassMate</Text>
-        <Image style={styles.logo} source={require('./assets/classmate_icon.png')} />
+        <Image style={styles.logo} source={require('../../assets/classmate_icon.png')} />
       </View>
 
       <TextInput
@@ -99,7 +101,8 @@ export default function App() {
         renderItem={renderItem}
         keyExtractor={item => item.id.toString()}
       />
-    </SafeAreaView> 
+
+    </SafeAreaView>
   );
 }
 
@@ -108,21 +111,21 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
-  box: { 
+  box: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingVertical: 5,
     paddingHorizontal: 20,
     margin: 20,
-    borderRadius: 10, 
+    borderRadius: 10,
     backgroundColor: '#2468ff',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
   },
   title: {
     fontSize: 30,
     fontWeight: 'bold',
-    color: 'white',   
+    color: 'white',
   },
   logo: {
     width: 80,
@@ -143,11 +146,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   item: {
-    padding: 20,  
+    padding: 20,
     backgroundColor: 'white',
     marginHorizontal: 20,
     marginVertical: 10,
-    borderRadius: 10, 
+    borderRadius: 10,
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
   },
   postTitle: {
@@ -164,10 +167,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   postAuthor: {
-    fontSize: 15, 
+    fontSize: 15,
   },
   postDate: {
-    fontSize: 15, 
+    fontSize: 15,
   },
   postDescription: {
     fontSize: 15,
