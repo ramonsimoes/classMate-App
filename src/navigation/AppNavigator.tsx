@@ -1,15 +1,60 @@
-import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import App from '../screens/App';
-import PostDetails from '../screens/PostDetails';
+import React from 'react'
+import { createStackNavigator } from '@react-navigation/stack'
+import { NavigationContainer } from '@react-navigation/native'
+import { RootStackParamList } from '../types'
+import App from '../screens/App'
+import LoginScreen from '../screens/LoginScreen'
+import PostDetails from '../screens/PostDetails'
+import CreatePost from '../screens/CreatePost'
+import EditPost from '../screens/EditPost'
+import SignUpScreen from '../screens/SignUpScreen'
+import { AuthProvider } from '../Context/AuthContext'
+import TeachersList from '../screens/TeachersList'
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>()
 
 export default function AppNavigator() {
   return (
-    <Stack.Navigator initialRouteName="App">
-      <Stack.Screen name="App" component={App} />
-      <Stack.Screen name="PostDetails" component={PostDetails} />
-    </Stack.Navigator>
-  );
+    <AuthProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TeachersList"
+            component={TeachersList}
+            options={{ title: 'Professores' }}
+          />
+          <Stack.Screen
+            name="SignUp"
+            component={SignUpScreen}
+            options={{ title: 'Cadastro' }}
+          />
+          <Stack.Screen
+            name="App"
+            component={App}
+            options={{ title: 'Home' }}
+          />
+          <Stack.Screen
+            name="PostDetails"
+            component={PostDetails}
+            options={{ title: 'Post Details' }}
+          />
+          <Stack.Screen
+            name="CreatePost"
+            component={CreatePost}
+            options={{ title: 'Criar Postagem' }}
+          />
+          <Stack.Screen
+            name="EditPost"
+            component={EditPost}
+            options={{ title: 'Editar Postagem' }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </AuthProvider>
+  )
 }

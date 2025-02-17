@@ -1,66 +1,78 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { useRoute, RouteProp } from '@react-navigation/native';
-import { supabase } from '../../lib/supabase';
-import { format } from 'date-fns';
+import React, { useEffect, useState } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import {
+  useRoute,
+  RouteProp,
+  useNavigation,
+  NavigationProp,
+} from '@react-navigation/native'
+import { format } from 'date-fns'
+import { RootStackParamList } from '../types'
 
 interface Post {
-  id: number;
-  title: string;
-  author: string;
-  created_at: string;
-  small_description: string;
-  full_description: string;
+  id: string
+  title: string
+  author: string
+  createdAt: string
+  smallDescription: string
+  fullDescription: string
 }
 
 type RouteParams = {
   params: {
-    postId: number;
-  };
-};
+    postId: string
+  }
+}
 
 export default function PostDetails() {
-  const route = useRoute<RouteProp<RouteParams, 'params'>>();
-  const { postId } = route.params || {}; // Adiciona verificação para route.params
-  const [post, setPost] = useState<Post | null>(null);
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>()
+  const route = useRoute<RouteProp<RouteParams, 'params'>>()
+  const { postId } = route.params || {}
+  const [post, setPost] = useState<Post | null>(null)
 
   useEffect(() => {
     if (postId) {
-      getPostDetails();
+      getPostDetails()
     }
-  }, [postId]);
+  }, [postId])
 
   async function getPostDetails() {
     try {
-      const { data, error } = await supabase.from("posts").select("*").eq("id", postId).single();
-      if (error) {
-        console.error("Error fetching post details:", error);
-        return;
-      }
-      if (data) {
-        setPost(data);
-      }
+      const response = await fetch(`http://localhost:5000/posts/${postId}`)
+      const data: Post = await response.json()
+      setPost(data)
     } catch (error) {
-      console.error("Unexpected error:", error);
+      console.error('Erro ao buscar detalhes do post:', error)
     }
   }
 
   if (!post) {
     return (
       <View style={styles.container}>
-        <Text>Loading...</Text>
+        <Text>Carregando...</Text>
       </View>
-    );
+    )
   }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{post.title}</Text>
-      <Text style={styles.author}>By {post.author}</Text>
-      <Text style={styles.date}>{format(new Date(post.created_at), 'dd/MM/yyyy HH:mm')}</Text>
-      <Text style={styles.description}>{post.full_description}</Text>
+      <Text style={styles.author}>Por {post.author}</Text>
+      <Text style={styles.date}>
+        {format(new Date(post.createdAt), 'dd/MM/yyyy HH:mm')}
+      </Text>
+      <Text style={styles.description}>{post.fullDescription}</Text>
+
+      <TouchableOpacity
+        style={styles.editButton}
+        onPress={() => {
+          navigation.navigate('EditPost', { post })
+        }}
+      >
+        <Text style={styles.editButtonText}>Editar Postagem</Text>
+      </TouchableOpacity>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -85,4 +97,16 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
   },
-});
+  editButton: {
+    backgroundColor: '#2468ff',
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  editButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+})
