@@ -10,6 +10,7 @@ import EditPost from '../screens/EditPost'
 import SignUpScreen from '../screens/SignUpScreen'
 import { AuthProvider } from '../Context/AuthContext'
 import TeachersList from '../screens/TeachersList'
+import EditTeacher from '../screens/EditTeacher'
 
 const Stack = createStackNavigator<RootStackParamList>()
 
@@ -29,6 +30,11 @@ export default function AppNavigator() {
             options={{ title: 'Professores' }}
           />
           <Stack.Screen
+            name="EditTeacher"
+            component={EditTeacher}
+            options={{ title: 'Editar Professor' }}
+          />
+          <Stack.Screen
             name="SignUp"
             component={SignUpScreen}
             options={{ title: 'Cadastro' }}
@@ -41,7 +47,7 @@ export default function AppNavigator() {
           <Stack.Screen
             name="PostDetails"
             component={PostDetails}
-            options={{ title: 'Post Details' }}
+            options={{ title: 'Detalhes da postagem' }}
           />
           <Stack.Screen
             name="CreatePost"

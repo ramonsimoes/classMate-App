@@ -38,11 +38,23 @@ export default function TeachersList() {
     navigation.navigate('EditTeacher', { teacher })
   }
 
-  const handleDeleteTeacher = (teacherId: string) => {
-    console.log(`Professor com ID ${teacherId} excluído (mockado)`)
-    setTeachers((prevTeachers) =>
-      prevTeachers.filter((teacher) => teacher.id !== teacherId)
-    )
+  const handleDeleteTeacher = async (teacherId: string) => {
+    try {
+      const response = await fetch(`http://localhost:5000/users/${teacherId}`, {
+        method: 'DELETE',
+      })
+
+      if (response.ok) {
+        console.log(`Professor com ID ${teacherId} excluído com sucesso`)
+        setTeachers((prevTeachers) =>
+          prevTeachers.filter((teacher) => teacher.id !== teacherId)
+        )
+      } else {
+        console.error('Erro ao excluir o professor')
+      }
+    } catch (error) {
+      console.error('Erro ao excluir o professor:', error)
+    }
   }
 
   const renderItem = ({ item }: { item: Teacher }) => (
