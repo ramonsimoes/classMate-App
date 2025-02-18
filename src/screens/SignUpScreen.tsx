@@ -37,7 +37,7 @@ export default function SignUpScreen() {
 
       if (response.ok) {
         alert('Usuário cadastrado com sucesso!')
-        navigation.navigate('Login')
+        navigation.navigate('App')
       } else {
         alert('Erro ao cadastrar usuário.')
       }
@@ -80,8 +80,8 @@ export default function SignUpScreen() {
           onValueChange={(itemValue) => setRole(itemValue)}
           style={styles.picker}
         >
-          <Picker.Item label="Aluno" value="MEMBER" />
-          <Picker.Item label="Professor" value="ADMIN" />
+          <Picker.Item label=" Aluno" value="MEMBER" />
+          <Picker.Item label=" Professor" value="ADMIN" />
         </Picker>
       </View>
 
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 20,
+    padding: 20,
     backgroundColor: '#f5f5f5',
   },
   title: {
@@ -112,12 +112,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 15,
+    marginHorizontal: 20,
   },
   pickerContainer: {
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 5,
     marginBottom: 15,
+    marginHorizontal: 20,
   },
   picker: {
     height: 40,
@@ -128,6 +130,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 5,
     alignItems: 'center',
+    marginHorizontal: 20,
   },
   buttonText: {
     color: 'white',

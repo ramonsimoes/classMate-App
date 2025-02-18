@@ -8,14 +8,14 @@ import {
 } from '@react-navigation/native'
 import { format } from 'date-fns'
 import { RootStackParamList } from '../types'
+import { useAuth } from '../Context/AuthContext'
 
 interface Post {
   id: string
   title: string
   author: string
   createdAt: string
-  smallDescription: string
-  fullDescription: string
+  content: string
 }
 
 type RouteParams = {
@@ -29,6 +29,9 @@ export default function PostDetails() {
   const route = useRoute<RouteProp<RouteParams, 'params'>>()
   const { postId } = route.params || {}
   const [post, setPost] = useState<Post | null>(null)
+
+  const { userEmail } = useAuth()
+  const [userRole, setUserRole] = useState<'ADMIN' | 'MEMBER' | null>(null)
 
   useEffect(() => {
     if (postId) {
@@ -46,6 +49,27 @@ export default function PostDetails() {
     }
   }
 
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      if (!userEmail) return
+
+      try {
+        const response = await fetch('http://localhost:5000/users')
+        const users = await response.json()
+
+        const loggedInUser = users.find((user: any) => user.email === userEmail)
+
+        if (loggedInUser) {
+          setUserRole(loggedInUser.role)
+        }
+      } catch (error) {
+        console.error('Erro ao buscar usuários:', error)
+      }
+    }
+
+    fetchUserRole()
+  }, [userEmail])
+
   if (!post) {
     return (
       <View style={styles.container}>
@@ -61,16 +85,17 @@ export default function PostDetails() {
       <Text style={styles.date}>
         {format(new Date(post.createdAt), 'dd/MM/yyyy HH:mm')}
       </Text>
-      <Text style={styles.description}>{post.fullDescription}</Text>
-
-      <TouchableOpacity
-        style={styles.editButton}
-        onPress={() => {
-          navigation.navigate('EditPost', { post })
-        }}
-      >
-        <Text style={styles.editButtonText}>Editar Postagem</Text>
-      </TouchableOpacity>
+      <Text style={styles.description}>{post.content}</Text>
+      {userRole === 'ADMIN' && (
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => {
+            navigation.navigate('EditPost', { post })
+          }}
+        >
+          <Text style={styles.editButtonText}>Editar Postagem</Text>
+        </TouchableOpacity>
+      )}
     </View>
   )
 }

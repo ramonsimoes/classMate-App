@@ -9,9 +9,13 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { format } from 'date-fns'
-import { useNavigation, NavigationProp } from '@react-navigation/native'
+import {
+  useNavigation,
+  NavigationProp,
+  useFocusEffect,
+} from '@react-navigation/native'
 import { RootStackParamList } from '../types'
 import { useAuth } from '../Context/AuthContext'
 
@@ -34,8 +38,6 @@ export default function App() {
   )
 
   const { userEmail } = useAuth()
-
-  console.log(userEmail)
 
   useEffect(() => {
     getPosts()
@@ -89,6 +91,12 @@ export default function App() {
       console.error('Erro ao excluir post:', error)
     }
   }
+
+  useFocusEffect(
+    useCallback(() => {
+      getPosts()
+    }, [])
+  )
 
   const renderItem = ({ item }: { item: Post }) => (
     <TouchableOpacity

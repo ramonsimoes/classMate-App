@@ -8,9 +8,8 @@ export interface Post {
   id: string
   title: string
   author: string
+  content: string
   createdAt: string
-  smallDescription: string
-  fullDescription: string
 }
 
 export type RootStackParamList = {
