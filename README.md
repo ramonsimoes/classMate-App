@@ -7,7 +7,7 @@ O **classMate-App** é um frontend mobile desenvolvido para ajudar estudantes e 
 Este documento descreve a arquitetura do sistema, as tecnologias utilizadas, o fluxo de uso da aplicação e como iniciar o projeto.
 
 ## Arquitetura do Sistema
-A arquitetura do **classMate-App** é dividida em três camadas principais:
+A arquitetura do **classMate-App** é dividida em duas camadas principais:
 
 ### Frontend
 - **Tecnologias:** React Native, Expo, Redux, React Navigation
